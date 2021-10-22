@@ -1,68 +1,45 @@
 package br.edu.ufersa.pw.leon.entity;
 
+import javax.persistence.*;
 import java.time.LocalDate;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-
-
 @Entity
-@Table(name = "tb_payment")
+@Table(name = "payments")
 public class Payment {
-    
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private Long id;
     @ManyToOne
-    @JoinColumn(name = "id_user")
-    private User user_id;
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
     @ManyToOne
-    @JoinColumn(name = "id_classe")
-    private Classe class_id;
-    private LocalDate payment_day;
+    @JoinColumn(name = "classe_id", nullable = false)
+    private Classe classe_id;
+    private LocalDate paymentDay;
 
-    public Payment(Long id, User user_id, Classe class_id, LocalDate payment_day) {
-        this.id = id;
-        this.user_id = user_id;
-        this.class_id = class_id;
-        this.payment_day = payment_day;
+    public Payment(User user, Classe classe_id, LocalDate paymentDay) {
+        this.user = user;
+        this.classe_id = classe_id;
+        this.paymentDay = paymentDay;
+    }
+
+    public Payment() {
+
     }
 
     public Long getId() {
-        return this.id;
+        return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public User getUser() {
+        return user;
     }
 
-    public User getUser_id() {
-        return this.user_id;
+    public Classe getClasse_id() {
+        return classe_id;
     }
 
-    public void setUser_id(User user_id) {
-        this.user_id = user_id;
+    public LocalDate getPaymentDay() {
+        return paymentDay;
     }
-
-    public Classe getClass_id() {
-        return this.class_id;
-    }
-
-    public void setClass_id(Classe class_id) {
-        this.class_id = class_id;
-    }
-
-    public LocalDate getPayment_day() {
-        return this.payment_day;
-    }
-
-    public void setPayment_day(LocalDate payment_day) {
-        this.payment_day = payment_day;
-    }
-
 }
