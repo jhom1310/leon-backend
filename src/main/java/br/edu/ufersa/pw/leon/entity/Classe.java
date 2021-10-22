@@ -1,4 +1,4 @@
-package br.edu.ufersa.pw.leon.todolist.entity;
+package br.edu.ufersa.pw.leon.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

@@ -1,4 +1,4 @@
-package br.edu.ufersa.pw.leon.todolist;
+package br.edu.ufersa.pw.leon.main;
 
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;

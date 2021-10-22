@@ -1,4 +1,4 @@
-package br.edu.ufersa.pw.leon.todolist;
+package br.edu.ufersa.pw.leon.main;
 
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,8 +7,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import br.edu.ufersa.pw.leon.todolist.entity.User;
-import br.edu.ufersa.pw.leon.todolist.repositories.UserRepository;
+import br.edu.ufersa.pw.leon.repositories.UserRepository;
 
 @SpringBootApplication
 public class LeonApplication {
