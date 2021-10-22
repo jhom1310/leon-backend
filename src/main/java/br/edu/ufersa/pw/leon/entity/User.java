@@ -2,6 +2,7 @@ package br.edu.ufersa.pw.leon.entity;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -18,6 +19,11 @@ public class User {
     private String avatarURL;
     private int availableReschedules;
     private int availableExperiments;
+    @OneToMany(mappedBy = "user")
+    List<Payment> payments;
+    // TODO: descobrir como adicionar relacionamento com ExperimentalClasse
+    @OneToMany(mappedBy = "user")
+    List<Classe> classes;
 
     public User(String name, String email, String password) {
         this.name = name;
