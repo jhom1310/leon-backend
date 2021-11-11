@@ -1,10 +1,9 @@
 package br.edu.ufersa.leon.leon.entity;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "experimental_classes")
 public class ExperimentalClasse {
     @Id
     @GeneratedValue

@@ -1,88 +1,72 @@
 package br.edu.ufersa.leon.leon.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
-@Table(name = "tb_classe")
+@Table(name = "classes")
 public class Classe {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private Long id;
     @ManyToOne
-    @JoinColumn(name = "id_gym")
-    private Gym gym_id;
-    private Double price;
+    @JoinColumn(name = "gym_id", nullable = false)
+    private Gym gym;
+    private double price;
     @ManyToOne
-    @JoinColumn(name = "id_teacher")
-    private Teacher teacher_id;
+    @JoinColumn(name = "teacher_id", nullable = false)
+    private Teacher teacher;
     @ManyToOne
-    @JoinColumn(name = "id_user")
-    private User user_id;
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
     @ManyToOne
-    @JoinColumn(name = "id_modality")
-    private Modality modality_id;
-
-    public Classe(Long id, Gym gym_id, Double price, Teacher teacher_id, User user_id, Modality modality_id) {
-        this.id = id;
-        this.gym_id = gym_id;
-        this.price = price;
-        this.teacher_id = teacher_id;
-        this.user_id = user_id;
-        this.modality_id = modality_id;
-    }
+    @JoinColumn(name = "modality_id", nullable = false)
+    private Modality modality;
 
     public Long getId() {
-        return this.id;
+        return id;
     }
 
     public void setId(Long id) {
         this.id = id;
     }
 
-    public Gym getGym_id() {
-        return this.gym_id;
+    public Gym getGym() {
+        return gym;
     }
 
-    public void setGym_id(Gym gym_id) {
-        this.gym_id = gym_id;
+    public void setGym(Gym gym) {
+        this.gym = gym;
     }
 
-    public Double getPrice() {
-        return this.price;
+    public double getPrice() {
+        return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
-    public Teacher getTeacher_id() {
-        return this.teacher_id;
+    public Teacher getTeacher() {
+        return teacher;
     }
 
-    public void setTeacher_id(Teacher teacher_id) {
-        this.teacher_id = teacher_id;
+    public void setTeacher(Teacher teacher) {
+        this.teacher = teacher;
     }
 
-    public User getUser_id() {
-        return this.user_id;
+    public User getUser() {
+        return user;
     }
 
-    public void setUser_id(User user_id) {
-        this.user_id = user_id;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public Modality getModality_id() {
-        return this.modality_id;
+    public Modality getModality() {
+        return modality;
     }
 
-    public void setModality_id(Modality modality_id) {
-        this.modality_id = modality_id;
+    public void setModality(Modality modality) {
+        this.modality = modality;
     }
-
 }
