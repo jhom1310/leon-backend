@@ -1,4 +1,4 @@
-package br.edu.ufersa.pw.leon.entity;
+package br.edu.ufersa.leon.leon.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -28,8 +28,6 @@ public class Classe {
     @JoinColumn(name = "id_modality")
     private Modality modality_id;
 
-
-
     public Classe(Long id, Gym gym_id, Double price, Teacher teacher_id, User user_id, Modality modality_id) {
         this.id = id;
         this.gym_id = gym_id;
@@ -38,8 +36,6 @@ public class Classe {
         this.user_id = user_id;
         this.modality_id = modality_id;
     }
-
-
 
     public Long getId() {
         return this.id;
@@ -89,6 +85,4 @@ public class Classe {
         this.modality_id = modality_id;
     }
 
-
-    
 }

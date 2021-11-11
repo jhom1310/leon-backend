@@ -1,4 +1,4 @@
-package br.edu.ufersa.pw.leon.entity;
+package br.edu.ufersa.leon.leon.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,7 +15,6 @@ public class Modality {
     private String name;
     private String description;
     private String img_url;
-    
 
     public Modality(Long id, String name, String description, String img_url) {
         this.id = id;
@@ -23,7 +22,6 @@ public class Modality {
         this.description = description;
         this.img_url = img_url;
     }
-    
 
     public Long getId() {
         return this.id;

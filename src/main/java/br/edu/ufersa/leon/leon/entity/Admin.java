@@ -1,4 +1,4 @@
-package br.edu.ufersa.pw.leon.entity;
+package br.edu.ufersa.leon.leon.entity;
 
 import javax.persistence.*;
 import java.util.List;

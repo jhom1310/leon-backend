@@ -1,4 +1,4 @@
-package br.edu.ufersa.pw.leon.main;
+package br.edu.ufersa.leon.leon.main;
 
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
