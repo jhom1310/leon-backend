@@ -5,13 +5,16 @@ import br.edu.ufersa.leon.leon.services.UserService;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.net.URI;
+import java.time.LocalDate;
 import java.util.List;
 
 
@@ -27,6 +30,16 @@ public class UserController {
     @GetMapping
     public List<User> findAll() {
         return userService.getAll();
+    }
+
+    @GetMapping("/{email}")
+    public ResponseEntity<UserProfileDTO> findByEmail(@PathVariable @NotNull @Email String email) {
+        var authenticatedUserEmail = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (!authenticatedUserEmail.equals(email)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        var user = userService.findUserByEmail(email);
+        return ResponseEntity.ok(UserProfileDTO.fromEntity(user));
     }
 
     @PostMapping
@@ -65,5 +78,26 @@ class UserCreatedDTO {
         userCreated.setId(user.getId());
         userCreated.setEmail(user.getEmail());
         return userCreated;
+    }
+}
+
+@Data
+class UserProfileDTO {
+    Long id;
+    String name;
+    String email;
+    String address;
+    LocalDate birthday;
+    String avatarURL;
+
+    static UserProfileDTO fromEntity(User user) {
+        var userProfile = new UserProfileDTO();
+        userProfile.setId(user.getId());
+        userProfile.setName(user.getName());
+        userProfile.setEmail(user.getEmail());
+        userProfile.setAddress(user.getAddress());
+        userProfile.setBirthday(user.getBirthday());
+        userProfile.setAvatarURL(user.getAvatarURL());
+        return userProfile;
     }
 }

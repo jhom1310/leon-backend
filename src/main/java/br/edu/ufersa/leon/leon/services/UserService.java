@@ -49,12 +49,17 @@ public class UserService implements UserDetailsService {
         return Optional.of(userRepository.save(user));
     }
 
-    @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    public User findUserByEmail(String email) {
         var user = userRepository.findUserByEmail(email);
         if (user == null) {
             throw new UsernameNotFoundException("Email not found");
         }
+        return user;
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        var user = findUserByEmail(email);
         var authorities = user.getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName()))
                 .collect(Collectors.toList());

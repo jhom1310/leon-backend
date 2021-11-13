@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @SpringBootApplication
@@ -33,8 +34,12 @@ public class LeonApplication {
             userService.save(new Role(null, RoleType.ADMIN.getName()));
 
             var foo = new User();
+            foo.setName("John Doe");
             foo.setEmail("foo@gmail.com");
+            foo.setAddress("Rua dos Bobos, Nº 69");
+            foo.setBirthday(LocalDate.now());
             foo.setPassword("123");
+            foo.setAvatarURL("https://i.imgur.com/4JhL9z4.jpg");
             foo.setRoles(List.of(userRole));
             userService.save(foo);
 
