@@ -18,8 +18,6 @@ public class LeonApplication {
         SpringApplication.run(LeonApplication.class, args);
     }
 
-    private UserService userService;
-
     @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
