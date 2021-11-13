@@ -4,7 +4,9 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -17,11 +19,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.ZoneOffset;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -42,10 +41,22 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-        var email = request.getParameter("email");
-        var password = request.getParameter("password");
-        var token = new UsernamePasswordAuthenticationToken(email, password);
+        var credentials = parseCredentials(request);
+        var token = new UsernamePasswordAuthenticationToken(credentials.getEmail(), credentials.getPassword());
         return authenticationManager.authenticate(token);
+    }
+
+    private AuthCredentials parseCredentials(HttpServletRequest request) {
+        try {
+            var credentials = new ObjectMapper()
+                    .readValue(request.getInputStream(), AuthCredentials.class);
+            if (Strings.isEmpty(credentials.getEmail()) || Strings.isEmpty(credentials.getPassword())) {
+                throw new BadCredentialsException("Invalid credentials");
+            }
+            return credentials;
+        } catch (IOException e) {
+            throw new BadCredentialsException("Invalid credentials");
+        }
     }
 
     @Override
@@ -60,6 +71,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     }
 
     private String createToken(HttpServletRequest request, User user, Algorithm algorithm, long minutes) {
+        new AuthCredentials();
         return JWT.create()
                 .withSubject(user.getUsername())
                 .withExpiresAt(Date.from(LocalDateTime.now().plusMinutes(minutes).toInstant(ZoneOffset.ofHours(-3))))
@@ -67,4 +79,10 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .withClaim("roles", user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
                 .sign(algorithm);
     }
+}
+
+@Data
+class AuthCredentials {
+    private String email;
+    private String password;
 }
