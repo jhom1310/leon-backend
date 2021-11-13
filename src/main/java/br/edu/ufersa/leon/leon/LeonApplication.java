@@ -1,6 +1,7 @@
 package br.edu.ufersa.leon.leon;
 
 import br.edu.ufersa.leon.leon.entities.Role;
+import br.edu.ufersa.leon.leon.entities.RoleType;
 import br.edu.ufersa.leon.leon.entities.User;
 import br.edu.ufersa.leon.leon.services.UserService;
 import org.springframework.boot.CommandLineRunner;
@@ -26,8 +27,8 @@ public class LeonApplication {
     @Bean
     CommandLineRunner run(UserService userService) {
         return args -> {
-            var userRole = userService.save(new Role(null, "ROLE_USER"));
-            userService.save(new Role(null, "ROLE_ADMIN"));
+            var userRole = userService.save(new Role(null, RoleType.USER.getName()));
+            userService.save(new Role(null, RoleType.ADMIN.getName()));
 
             var foo = new User();
             foo.setEmail("foo@gmail.com");
