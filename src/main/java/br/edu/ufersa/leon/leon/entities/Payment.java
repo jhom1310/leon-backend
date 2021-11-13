@@ -1,4 +1,4 @@
-package br.edu.ufersa.leon.leon.entity;
+package br.edu.ufersa.leon.leon.entities;
 
 import javax.persistence.*;
 import java.time.LocalDate;

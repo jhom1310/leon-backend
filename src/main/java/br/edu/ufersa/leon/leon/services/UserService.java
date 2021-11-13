@@ -1,7 +1,7 @@
 package br.edu.ufersa.leon.leon.services;
 
-import br.edu.ufersa.leon.leon.entity.Role;
-import br.edu.ufersa.leon.leon.entity.User;
+import br.edu.ufersa.leon.leon.entities.Role;
+import br.edu.ufersa.leon.leon.entities.User;
 import br.edu.ufersa.leon.leon.repositories.RoleRepository;
 import br.edu.ufersa.leon.leon.repositories.UserRepository;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

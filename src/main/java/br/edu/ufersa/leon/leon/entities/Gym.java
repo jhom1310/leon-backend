@@ -1,4 +1,4 @@
-package br.edu.ufersa.leon.leon.entity;
+package br.edu.ufersa.leon.leon.entities;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -7,18 +7,18 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "tb_teacher")
-public class Teacher {
+@Table(name = "tb_gym")
+public class Gym {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private String img_url;
+    private String address;
 
-    public Teacher(Long id, String name, String img_url) {
+    public Gym(Long id, String name, String address) {
         this.id = id;
         this.name = name;
-        this.img_url = img_url;
+        this.address = address;
     }
 
     public Long getId() {
@@ -37,12 +37,12 @@ public class Teacher {
         this.name = name;
     }
 
-    public String getImg_url() {
-        return this.img_url;
+    public String getAddress() {
+        return this.address;
     }
 
-    public void setImg_url(String img_url) {
-        this.img_url = img_url;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
 }

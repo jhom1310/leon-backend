@@ -1,4 +1,4 @@
-package br.edu.ufersa.leon.leon.entity;
+package br.edu.ufersa.leon.leon.entities;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

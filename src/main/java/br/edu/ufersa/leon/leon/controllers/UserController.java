@@ -1,6 +1,6 @@
 package br.edu.ufersa.leon.leon.controllers;
 
-import br.edu.ufersa.leon.leon.entity.User;
+import br.edu.ufersa.leon.leon.entities.User;
 import br.edu.ufersa.leon.leon.services.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

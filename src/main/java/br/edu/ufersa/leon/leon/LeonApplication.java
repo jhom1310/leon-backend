@@ -1,7 +1,7 @@
 package br.edu.ufersa.leon.leon;
 
-import br.edu.ufersa.leon.leon.entity.Role;
-import br.edu.ufersa.leon.leon.entity.User;
+import br.edu.ufersa.leon.leon.entities.Role;
+import br.edu.ufersa.leon.leon.entities.User;
 import br.edu.ufersa.leon.leon.services.UserService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
