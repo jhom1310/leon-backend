@@ -6,8 +6,7 @@
 
 Inicie o banco de dados
 ```shell
-docker run -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgr
-es -e POSTGRES_DB=leon -p 5432:5432 -d postgres
+docker run -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=leon -p 5432:5432 -d postgres
 ```
 
 Em seguida, selecione o perfil `LeonApplication` e pressione o botão de debug.
