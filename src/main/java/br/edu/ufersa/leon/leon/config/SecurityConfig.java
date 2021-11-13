@@ -45,7 +45,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests().antMatchers(POST, AUTH_ROUTE + "/**").permitAll()
                 .and()
-                .authorizeRequests().antMatchers(GET, MODALITIES_ROUTE).permitAll()
+                .authorizeRequests().antMatchers(GET, MODALITIES_ROUTE + "/**").permitAll()
                 .and()
                 .authorizeRequests().antMatchers(
                         "/v2/api-docs",

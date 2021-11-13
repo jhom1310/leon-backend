@@ -5,6 +5,7 @@ import br.edu.ufersa.leon.leon.repositories.ModalityRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ModalityService {
@@ -14,11 +15,15 @@ public class ModalityService {
         this.modalityRepository = modalityRepository;
     }
 
-    public List<Modality> getAll() {
+    public List<Modality> findAll() {
         return modalityRepository.findAll();
     }
 
     public List<Modality> saveAll(List<Modality> modalities) {
         return modalityRepository.saveAll(modalities);
+    }
+
+    public Optional<Modality> find(Long id) {
+        return modalityRepository.findById(id);
     }
 }

@@ -2,10 +2,10 @@ package br.edu.ufersa.leon.leon.controllers;
 
 import br.edu.ufersa.leon.leon.entities.Modality;
 import br.edu.ufersa.leon.leon.services.ModalityService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 
@@ -20,6 +20,13 @@ public class ModalityController {
 
     @GetMapping
     public List<Modality> findAll() {
-        return modalityService.getAll();
+        return modalityService.findAll();
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/{id}")
+    public ResponseEntity<Modality> findById(@PathVariable @NotNull Long id) {
+        return modalityService.find(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 }
