@@ -1,11 +1,19 @@
 package br.edu.ufersa.leon.leon.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "users")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
     @Id
     @GeneratedValue
@@ -24,50 +32,6 @@ public class User {
     // TODO: descobrir como adicionar relacionamento com ExperimentalClasse
     @OneToMany(mappedBy = "user")
     List<Classe> classes;
-
-    public User(String name, String email, String password) {
-        this.name = name;
-        this.email = email;
-        this.password = password;
-    }
-
-    public User() {
-
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public LocalDate getBirthday() {
-        return birthday;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public String getCellphone() {
-        return cellphone;
-    }
-
-    public String getAvatarURL() {
-        return avatarURL;
-    }
-
-    public int getAvailableReschedules() {
-        return availableReschedules;
-    }
-
-    public int getAvailableExperiments() {
-        return availableExperiments;
-    }
+    @ManyToMany(fetch = FetchType.EAGER)
+    private List<Role> roles = new ArrayList<>();
 }
