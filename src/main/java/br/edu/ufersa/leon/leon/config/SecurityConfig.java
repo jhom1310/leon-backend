@@ -18,6 +18,7 @@ import static org.springframework.http.HttpMethod.POST;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public static final String AUTH_ROUTE = "/auth";
+    public static final String SWAGGER_PATH = "/swagger-ui.html";
     private final UserDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
 
@@ -41,6 +42,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests().antMatchers(POST, AUTH_ROUTE + "/**").permitAll()
+                .and()
+                .authorizeRequests().antMatchers(
+                        "/v2/api-docs",
+                        "/configuration/ui",
+                        "/swagger-resources/**",
+                        "/configuration/security",
+                        "/swagger-ui/**",
+                        "/webjars/**"
+                ).permitAll()
                 .and()
                 .authorizeRequests().anyRequest().authenticated()
                 .and()
