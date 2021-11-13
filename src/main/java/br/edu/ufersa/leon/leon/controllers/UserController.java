@@ -49,15 +49,11 @@ class UserCreationDTO {
     String email;
     @NotBlank(message = "Password can't be null or empty")
     String password;
-    @NotNull(message = "Birthday can't be null or empty")
-    @Past(message = "Birthday must be in the past")
-    LocalDate birthday;
 
     User asEntity() {
         var user = new User();
         user.setEmail(email);
         user.setPassword(password);
-        user.setBirthday(birthday);
         return user;
     }
 }
@@ -66,13 +62,11 @@ class UserCreationDTO {
 class UserCreatedDTO {
     Long id;
     String email;
-    LocalDate birthday;
 
     static UserCreatedDTO fromEntity(User user) {
         var userCreated = new UserCreatedDTO();
         userCreated.setId(user.getId());
         userCreated.setEmail(user.getEmail());
-        userCreated.setBirthday(user.getBirthday());
         return userCreated;
     }
 }
