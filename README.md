@@ -2,10 +2,18 @@
 
 ## Como executar
 
+- **Pelo IntelliJ**
+
+Selecione o perfil `LeonApplication` e pressione o botão de debug.
+
+- **Pelo docker**
+
 ```shell
 docker-compose up
 ```
 
-Nesse momento terá disponível os endpoints a partir de `localhost:8080`.
+Os endpoints seguirão o formato `localhost:8080/endpoint`.
 
 Para descobrir as rotas acesse o [Swagger](https://swagger.io/) em `localhost:8080/swagger-ui`.
+> **OBS.:** Por alguma razão o Swagger não está funcionando dentro do Docker.
+ 
