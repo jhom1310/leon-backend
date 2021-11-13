@@ -1,6 +1,6 @@
-:lion: Leon backend
+# :lion: Leon backend
 
-# Como executar
+## Como executar
 
 ```shell
 docker-compose up
