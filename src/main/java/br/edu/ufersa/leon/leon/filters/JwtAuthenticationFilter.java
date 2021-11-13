@@ -71,7 +71,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     }
 
     private String createToken(HttpServletRequest request, User user, Algorithm algorithm, long minutes) {
-        new AuthCredentials();
         return JWT.create()
                 .withSubject(user.getUsername())
                 .withExpiresAt(Date.from(LocalDateTime.now().plusMinutes(minutes).toInstant(ZoneOffset.ofHours(-3))))
