@@ -26,4 +26,8 @@ public class ModalityService {
     public Optional<Modality> find(Long id) {
         return modalityRepository.findById(id);
     }
+
+    public List<Modality> search(String query) {
+        return modalityRepository.search(query);
+    }
 }

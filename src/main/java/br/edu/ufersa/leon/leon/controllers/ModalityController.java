@@ -5,6 +5,7 @@ import br.edu.ufersa.leon.leon.services.ModalityService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -22,10 +23,15 @@ public class ModalityController {
         return modalityService.findAll();
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Modality> findById(@PathVariable @NotNull Long id) {
         return modalityService.find(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/search")
+    public List<Modality> search(@RequestParam("name") @NotBlank String query) {
+        return modalityService.search(query);
     }
 }
