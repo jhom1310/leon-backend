@@ -1,6 +1,7 @@
 package br.edu.ufersa.leon.leon.services;
 
 import br.edu.ufersa.leon.leon.entities.Role;
+import br.edu.ufersa.leon.leon.entities.RoleType;
 import br.edu.ufersa.leon.leon.entities.User;
 import br.edu.ufersa.leon.leon.repositories.RoleRepository;
 import br.edu.ufersa.leon.leon.repositories.UserRepository;
@@ -11,7 +12,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,9 +37,16 @@ public class UserService implements UserDetailsService {
         return roleRepository.save(role);
     }
 
-    public User save(User user) {
+    @Transactional
+    public Optional<User> save(User user) {
+        var userAlreadyExists = userRepository.findUserByEmail(user.getEmail()) != null;
+        if (userAlreadyExists) {
+            return Optional.empty();
+        }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userRepository.save(user);
+        var role = roleRepository.findByName(RoleType.USER.getName());
+        user.setRoles(List.of(role));
+        return Optional.of(userRepository.save(user));
     }
 
     @Override
