@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
 
 @Configuration
@@ -19,7 +20,7 @@ import static org.springframework.http.HttpMethod.POST;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public static final String AUTH_ROUTE = "/auth";
     public static final String USERS_ROUTE = "/users";
-    public static final String SWAGGER_PATH = "/swagger-ui.html";
+    public static final String MODALITIES_ROUTE = "/modalities";
     private final UserDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
 
@@ -43,6 +44,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests().antMatchers(POST, AUTH_ROUTE + "/**").permitAll()
+                .and()
+                .authorizeRequests().antMatchers(GET, MODALITIES_ROUTE).permitAll()
                 .and()
                 .authorizeRequests().antMatchers(
                         "/v2/api-docs",
