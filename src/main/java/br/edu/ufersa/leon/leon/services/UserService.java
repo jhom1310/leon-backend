@@ -1,5 +1,6 @@
 package br.edu.ufersa.leon.leon.services;
 
+import br.edu.ufersa.leon.leon.dtos.user.EditUserProfileDTO;
 import br.edu.ufersa.leon.leon.entities.Role;
 import br.edu.ufersa.leon.leon.entities.RoleType;
 import br.edu.ufersa.leon.leon.entities.User;
@@ -64,5 +65,14 @@ public class UserService implements UserDetailsService {
                 .map(role -> new SimpleGrantedAuthority(role.getName()))
                 .collect(Collectors.toList());
         return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), authorities);
+    }
+
+    public User update(String email, EditUserProfileDTO userProfile) {
+        var user = findUserByEmail(email);
+        user.setName(userProfile.getName());
+        user.setAddress(userProfile.getAddress());
+        user.setBirthday(userProfile.getBirthday());
+        user.setAvatarURL(userProfile.getAvatarURL());
+        return userRepository.save(user);
     }
 }

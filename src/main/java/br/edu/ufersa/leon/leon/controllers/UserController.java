@@ -1,5 +1,7 @@
 package br.edu.ufersa.leon.leon.controllers;
 
+import br.edu.ufersa.leon.leon.dtos.user.EditUserProfileDTO;
+import br.edu.ufersa.leon.leon.dtos.user.UserProfileDTO;
 import br.edu.ufersa.leon.leon.entities.User;
 import br.edu.ufersa.leon.leon.services.UserService;
 import lombok.Data;
@@ -14,7 +16,6 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.net.URI;
-import java.time.LocalDate;
 import java.util.List;
 
 
@@ -40,6 +41,11 @@ public class UserController {
         }
         var user = userService.findUserByEmail(email);
         return ResponseEntity.ok(UserProfileDTO.fromEntity(user));
+    }
+
+    @PatchMapping("/{email}")
+    public void update(@PathVariable @NotNull @Email String email, @Valid @RequestBody EditUserProfileDTO userProfile) {
+        userService.update(email, userProfile);
     }
 
     @PostMapping
@@ -78,26 +84,5 @@ class UserCreatedDTO {
         userCreated.setId(user.getId());
         userCreated.setEmail(user.getEmail());
         return userCreated;
-    }
-}
-
-@Data
-class UserProfileDTO {
-    Long id;
-    String name;
-    String email;
-    String address;
-    LocalDate birthday;
-    String avatarURL;
-
-    static UserProfileDTO fromEntity(User user) {
-        var userProfile = new UserProfileDTO();
-        userProfile.setId(user.getId());
-        userProfile.setName(user.getName());
-        userProfile.setEmail(user.getEmail());
-        userProfile.setAddress(user.getAddress());
-        userProfile.setBirthday(user.getBirthday());
-        userProfile.setAvatarURL(user.getAvatarURL());
-        return userProfile;
     }
 }
