@@ -29,10 +29,29 @@ public class User {
     private int availableReschedules;
     private int availableExperiments;
     @OneToMany(mappedBy = "user")
-    List<Payment> payments;
+    List<Payment> payments = new ArrayList<>();
     // TODO: descobrir como adicionar relacionamento com ExperimentalClasse
-    @OneToMany(mappedBy = "user")
-    List<Classe> classes;
+    @ManyToMany
+    @JoinTable(
+            name = "users_classes",
+            joinColumns = {
+                    @JoinColumn(
+                            name = "user_id",
+                            referencedColumnName = "id",
+                            nullable = false,
+                            updatable = false
+                    ),
+            },
+            inverseJoinColumns = {
+                    @JoinColumn(
+                            name = "classe_id",
+                            referencedColumnName = "id",
+                            nullable = false,
+                            updatable = false
+                    ),
+            }
+    )
+    List<Classe> classes = new ArrayList<>();
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Role> roles = new ArrayList<>();
 }

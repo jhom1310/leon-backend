@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "modalities")
@@ -18,4 +20,7 @@ public class Modality {
     private String name;
     private String description;
     private String imageURL;
+    @OneToMany(mappedBy = "modality")
+    List<Classe> classes = new ArrayList<>();
+    // TODO: descobrir como salvar os horários das aulas
 }

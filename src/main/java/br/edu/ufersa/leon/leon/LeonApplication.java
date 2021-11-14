@@ -1,9 +1,9 @@
 package br.edu.ufersa.leon.leon;
 
-import br.edu.ufersa.leon.leon.entities.Modality;
-import br.edu.ufersa.leon.leon.entities.Role;
-import br.edu.ufersa.leon.leon.entities.RoleType;
-import br.edu.ufersa.leon.leon.entities.User;
+import br.edu.ufersa.leon.leon.entities.*;
+import br.edu.ufersa.leon.leon.repositories.ClasseRepository;
+import br.edu.ufersa.leon.leon.repositories.GymRepository;
+import br.edu.ufersa.leon.leon.repositories.TeacherRepository;
 import br.edu.ufersa.leon.leon.services.ModalityService;
 import br.edu.ufersa.leon.leon.services.UserService;
 import org.springframework.boot.CommandLineRunner;
@@ -28,7 +28,13 @@ public class LeonApplication {
     }
 
     @Bean
-    CommandLineRunner run(UserService userService, ModalityService modalityService) {
+    CommandLineRunner run(
+            UserService userService,
+            ModalityService modalityService,
+            GymRepository gymRepository,
+            TeacherRepository teacherRepository,
+            ClasseRepository classeRepository
+    ) {
         return args -> {
             var userRole = userService.save(new Role(null, RoleType.USER.getName()));
             userService.save(new Role(null, RoleType.ADMIN.getName()));
@@ -43,13 +49,20 @@ public class LeonApplication {
             foo.setRoles(List.of(userRole));
             userService.save(foo);
 
-            modalityService.saveAll(
+            var modalities = modalityService.saveAll(
                     List.of(
-                        new Modality(null, "Ioga", "Uma descrição legal", "https://i.imgur.com/7tVmzFD.png"),
-                        new Modality(null, "Karatê", "Karatê kid é top", "https://i.imgur.com/7tVmzFD.png"),
-                        new Modality(null, "Pilates", "Mesma coisa de Ioga", "https://i.imgur.com/7tVmzFD.png")
+                        new Modality(null, "Ioga", "Uma descrição legal", "https://i.imgur.com/7tVmzFD.png", List.of()),
+                        new Modality(null, "Karatê", "Karatê kid é top", "https://i.imgur.com/7tVmzFD.png", List.of()),
+                        new Modality(null, "Pilates", "Mesma coisa de Ioga", "https://i.imgur.com/7tVmzFD.png", List.of())
                     )
             );
+            var ioga = modalities.get(0);
+            var gym = new Gym(null, "Academia 1", "Rua dos Bobos");
+            gymRepository.save(gym);
+            var teacher = new Teacher(null, "Maykon", UserService.DEFAULT_AVATAR_URL);
+            teacherRepository.save(teacher);
+            var iogaClasse = new Classe(null, gym, 42.0, teacher, List.of(), ioga);
+            classeRepository.save(iogaClasse);
         };
     }
 }

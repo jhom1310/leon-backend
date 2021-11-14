@@ -1,9 +1,18 @@
 package br.edu.ufersa.leon.leon.entities;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "classes")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Classe {
     @Id
     @GeneratedValue
@@ -15,58 +24,9 @@ public class Classe {
     @ManyToOne
     @JoinColumn(name = "teacher_id", nullable = false)
     private Teacher teacher;
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @ManyToMany(mappedBy = "classes")
+    private List<User> user = new ArrayList<>();
     @ManyToOne
     @JoinColumn(name = "modality_id", nullable = false)
     private Modality modality;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Gym getGym() {
-        return gym;
-    }
-
-    public void setGym(Gym gym) {
-        this.gym = gym;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    public Teacher getTeacher() {
-        return teacher;
-    }
-
-    public void setTeacher(Teacher teacher) {
-        this.teacher = teacher;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Modality getModality() {
-        return modality;
-    }
-
-    public void setModality(Modality modality) {
-        this.modality = modality;
-    }
 }
