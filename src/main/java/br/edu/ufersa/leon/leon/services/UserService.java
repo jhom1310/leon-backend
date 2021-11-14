@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class UserService implements UserDetailsService {
+    private static final String DEFAULT_AVATAR_URL = "https://i.imgur.com/QdLOFBP.jpg";
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
@@ -45,6 +46,7 @@ public class UserService implements UserDetailsService {
             return Optional.empty();
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setAvatarURL(DEFAULT_AVATAR_URL);
         var role = roleRepository.findByName(RoleType.USER.getName());
         user.setRoles(List.of(role));
         return Optional.of(userRepository.save(user));
