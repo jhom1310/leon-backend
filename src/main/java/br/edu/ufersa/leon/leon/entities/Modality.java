@@ -22,5 +22,4 @@ public class Modality {
     private String imageURL;
     @OneToMany(mappedBy = "modality")
     List<Classe> classes = new ArrayList<>();
-    // TODO: descobrir como salvar os horários das aulas
 }

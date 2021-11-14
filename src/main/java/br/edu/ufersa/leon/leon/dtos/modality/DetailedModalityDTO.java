@@ -1,11 +1,9 @@
 package br.edu.ufersa.leon.leon.dtos.modality;
 
-import br.edu.ufersa.leon.leon.entities.Classe;
-import br.edu.ufersa.leon.leon.entities.Gym;
-import br.edu.ufersa.leon.leon.entities.Modality;
-import br.edu.ufersa.leon.leon.entities.Teacher;
+import br.edu.ufersa.leon.leon.entities.*;
 import lombok.Data;
 
+import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,6 +31,7 @@ public class DetailedModalityDTO {
         private Gym gym;
         private double price;
         private Teacher teacher;
+        private List<IntervalDTO> intervals;
 
         public static ClasseDTO fromEntity(Classe classe) {
             var dto = new ClasseDTO();
@@ -40,6 +39,21 @@ public class DetailedModalityDTO {
             dto.setGym(classe.getGym());
             dto.setPrice(classe.getPrice());
             dto.setTeacher(classe.getTeacher());
+            dto.setIntervals(classe.getIntervals().stream().map(IntervalDTO::fromEntity).collect(Collectors.toList()));
+            return dto;
+        }
+    }
+    @Data
+    static class IntervalDTO {
+        private Long id;
+        private LocalTime initialTime;
+        private LocalTime finalTime;
+
+        public static IntervalDTO fromEntity(Interval interval) {
+            var dto = new IntervalDTO();
+            dto.setId(interval.getId());
+            dto.setInitialTime(interval.getInitialTime());
+            dto.setFinalTime(interval.getFinalTime());
             return dto;
         }
     }

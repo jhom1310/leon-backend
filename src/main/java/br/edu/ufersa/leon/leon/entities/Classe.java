@@ -29,4 +29,6 @@ public class Classe {
     @ManyToOne
     @JoinColumn(name = "modality_id", nullable = false)
     private Modality modality;
+    @OneToMany(mappedBy = "classe")
+    List<Interval> intervals = new ArrayList<>();
 }
