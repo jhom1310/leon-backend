@@ -61,7 +61,7 @@ public class LeonApplication {
             );
             var gym = new Gym(null, "Academia 1", "Rua dos Bobos");
             gymRepository.save(gym);
-            var teacher = new Teacher(null, "Maykon", UserService.DEFAULT_AVATAR_URL);
+            var teacher = new Teacher(null, "Maykon", UserService.DEFAULT_AVATAR_URL, List.of());
             teacherRepository.save(teacher);
             var ioga = modalities.get(0);
             var iogaClasse = new Classe(null, gym, 42.0, teacher, List.of(), ioga, List.of());
