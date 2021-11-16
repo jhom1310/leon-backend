@@ -25,7 +25,7 @@ public class Classe {
     @JoinColumn(name = "teacher_id", nullable = false)
     private Teacher teacher;
     @ManyToMany(mappedBy = "classes")
-    private List<User> user = new ArrayList<>();
+    private List<User> users = new ArrayList<>();
     @ManyToOne
     @JoinColumn(name = "modality_id", nullable = false)
     private Modality modality;

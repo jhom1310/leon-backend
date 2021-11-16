@@ -54,4 +54,12 @@ public class User {
     List<Classe> classes = new ArrayList<>();
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Role> roles = new ArrayList<>();
+
+    public void decrementAvailableExperiments() {
+        availableExperiments--;
+    }
+
+    public boolean hasAvailableExperiments() {
+        return availableExperiments > 0;
+    }
 }

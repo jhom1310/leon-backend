@@ -16,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootApplication
@@ -50,7 +51,7 @@ public class LeonApplication {
             foo.setPassword("123");
             foo.setAvatarURL("https://i.imgur.com/4JhL9z4.jpg");
             foo.setRoles(List.of(userRole));
-            userService.save(foo);
+            foo = userService.save(foo).get();
 
             var modalities = modalityService.saveAll(
                     List.of(
@@ -64,8 +65,8 @@ public class LeonApplication {
             var teacher = new Teacher(null, "Maykon", UserService.DEFAULT_AVATAR_URL, List.of());
             teacherRepository.save(teacher);
             var ioga = modalities.get(0);
-            var iogaClasse = new Classe(null, gym, 42.0, teacher, List.of(), ioga, List.of());
-            classeRepository.save(iogaClasse);
+            var iogaClasse = new Classe(null, gym, 42.0, teacher, new ArrayList<>(), ioga, new ArrayList<>());
+            iogaClasse = classeRepository.save(iogaClasse);
             var interval = new Interval(null, LocalTime.of(18, 0), LocalTime.of(19, 0), iogaClasse);
             intervalRepository.save(interval);
         };
