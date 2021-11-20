@@ -1,10 +1,17 @@
 package br.edu.ufersa.leon.leon.entities;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "payments")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Payment {
     @Id
     @GeneratedValue
@@ -14,32 +21,8 @@ public class Payment {
     private User user;
     @ManyToOne
     @JoinColumn(name = "classe_id", nullable = false)
-    private Classe classe_id;
+    private Classe classe;
     private LocalDate paymentDay;
-
-    public Payment(User user, Classe classe_id, LocalDate paymentDay) {
-        this.user = user;
-        this.classe_id = classe_id;
-        this.paymentDay = paymentDay;
-    }
-
-    public Payment() {
-
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public Classe getClasse_id() {
-        return classe_id;
-    }
-
-    public LocalDate getPaymentDay() {
-        return paymentDay;
-    }
+    private PaymentStatus status = PaymentStatus.PENDING;
+    private double cost;
 }

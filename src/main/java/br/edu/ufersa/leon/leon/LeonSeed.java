@@ -1,10 +1,9 @@
 package br.edu.ufersa.leon.leon;
 
+import br.edu.ufersa.leon.leon.dtos.classe.ClasseJoinRequestDTO;
 import br.edu.ufersa.leon.leon.entities.*;
-import br.edu.ufersa.leon.leon.repositories.ClasseRepository;
-import br.edu.ufersa.leon.leon.repositories.GymRepository;
-import br.edu.ufersa.leon.leon.repositories.IntervalRepository;
-import br.edu.ufersa.leon.leon.repositories.TeacherRepository;
+import br.edu.ufersa.leon.leon.repositories.*;
+import br.edu.ufersa.leon.leon.services.ClasseService;
 import br.edu.ufersa.leon.leon.services.ModalityService;
 import br.edu.ufersa.leon.leon.services.UserService;
 import org.springframework.boot.CommandLineRunner;
@@ -17,25 +16,29 @@ import java.util.List;
 
 @Component
 public class LeonSeed implements CommandLineRunner {
-    UserService userService;
-    ModalityService modalityService;
-    GymRepository gymRepository;
-    TeacherRepository teacherRepository;
-    ClasseRepository classeRepository;
-    IntervalRepository intervalRepository;
+    private final UserService userService;
+    private final ModalityService modalityService;
+    private final GymRepository gymRepository;
+    private final TeacherRepository teacherRepository;
+    private final ClasseRepository classeRepository;
+    private final ClasseService classeService;
+    private final IntervalRepository intervalRepository;
+    private final PaymentRepository paymentRepository;
 
-    public LeonSeed(UserService userService, ModalityService modalityService, GymRepository gymRepository, TeacherRepository teacherRepository, ClasseRepository classeRepository, IntervalRepository intervalRepository) {
+    public LeonSeed(UserService userService, ModalityService modalityService, GymRepository gymRepository, TeacherRepository teacherRepository, ClasseRepository classeRepository, ClasseService classeService, IntervalRepository intervalRepository, PaymentRepository paymentRepository) {
         this.userService = userService;
         this.modalityService = modalityService;
         this.gymRepository = gymRepository;
         this.teacherRepository = teacherRepository;
         this.classeRepository = classeRepository;
+        this.classeService = classeService;
         this.intervalRepository = intervalRepository;
+        this.paymentRepository = paymentRepository;
     }
 
     @Override
     public void run(String... args) {
-        usersSeed();
+        var fooUser = usersSeed();
 
         var modalities = modalityService.saveAll(
                 List.of(
@@ -55,9 +58,12 @@ public class LeonSeed implements CommandLineRunner {
         intervalRepository.save(interval);
         interval = new Interval(null, LocalDate.now().plusDays(1), LocalTime.of(14, 0), LocalTime.of(14, 30), iogaClasse);
         intervalRepository.save(interval);
+        var classeJoinRequest = new ClasseJoinRequestDTO(false);
+        classeService.join(iogaClasse.getId(), fooUser, classeJoinRequest);
+        paymentsSeed(fooUser, iogaClasse);
     }
 
-    private void usersSeed() {
+    private User usersSeed() {
         var userRole = userService.save(new Role(null, RoleType.USER.getName()));
         userService.save(new Role(null, RoleType.ADMIN.getName()));
 
@@ -69,6 +75,13 @@ public class LeonSeed implements CommandLineRunner {
         foo.setPassword("123");
         foo.setAvatarURL("https://i.imgur.com/4JhL9z4.jpg");
         foo.setRoles(List.of(userRole));
-        foo = userService.save(foo).get();
+        return userService.save(foo).get();
+    }
+
+    private void paymentsSeed(User user, Classe classe) {
+        var paidPayment = new Payment(null, user, classe, LocalDate.now(), PaymentStatus.PAID, 69);
+        var pendingPayment = new Payment(null, user, classe, LocalDate.now().plusMonths(1), PaymentStatus.PENDING, 42);
+        var payments = List.of(paidPayment, pendingPayment);
+        paymentRepository.saveAll(payments);
     }
 }
