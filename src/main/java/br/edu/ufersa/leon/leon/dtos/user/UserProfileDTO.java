@@ -20,6 +20,7 @@ public class UserProfileDTO {
     LocalDate birthday;
     @NotBlank
     String avatarURL;
+    int availableExperiments;
 
     public static UserProfileDTO fromEntity(User user) {
         var userProfile = new UserProfileDTO();
@@ -29,6 +30,7 @@ public class UserProfileDTO {
         userProfile.setAddress(user.getAddress());
         userProfile.setBirthday(user.getBirthday());
         userProfile.setAvatarURL(user.getAvatarURL());
+        userProfile.setAvailableExperiments(user.getAvailableExperiments());
         return userProfile;
     }
 }
