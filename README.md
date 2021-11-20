@@ -19,6 +19,8 @@ docker-compose up
 
 Os endpoints seguirão o formato `localhost:8080/endpoint`.
 
-Para descobrir as rotas acesse o [Swagger](https://swagger.io/) em `localhost:8080/swagger-ui`.
+Para descobrir as rotas acesse o [Swagger](https://swagger.io/) em `localhost:8080/swagger-ui/`.
+> Perceba a `/` ao final do link. Ela é obrigatória. 
+> 
 > **OBS.:** Por alguma razão o Swagger não está funcionando dentro do Docker.
  
