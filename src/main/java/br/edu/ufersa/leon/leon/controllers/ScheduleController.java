@@ -28,7 +28,7 @@ public class ScheduleController {
         var userEmail = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         var user = userService.findUserByEmail(userEmail);
         var month = LocalDate.now().getMonthValue();
-        return scheduleService.getScheduleOfUser(user, month);
+        return scheduleService.getSchedulesBetween(user, month, month);
     }
 
     @GetMapping("/filter")
@@ -38,6 +38,6 @@ public class ScheduleController {
     ) {
         var userEmail = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         var user = userService.findUserByEmail(userEmail);
-        return scheduleService.getScheduleOfUserBetween(user, initialMonth, finalMonth);
+        return scheduleService.getSchedulesBetween(user, initialMonth, finalMonth);
     }
 }

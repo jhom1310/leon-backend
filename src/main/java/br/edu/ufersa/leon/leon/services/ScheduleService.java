@@ -19,14 +19,7 @@ public class ScheduleService {
         this.intervalRepository = intervalRepository;
     }
 
-    public List<ScheduleReportDTO> getScheduleOfUser(User user, int month) {
-        var initialDate = LocalDate.now().withMonth(month).withDayOfMonth(1);
-        var finalDate = initialDate.withDayOfMonth(initialDate.lengthOfMonth());
-        var intervals = intervalRepository.getScheduleBetween(user.getId(), initialDate, finalDate);
-        return mapIntervalsToSchedules(intervals);
-    }
-
-    public List<ScheduleReportDTO> getScheduleOfUserBetween(User user, int initialMonth, int finalMonth) {
+    public List<ScheduleReportDTO> getSchedulesBetween(User user, int initialMonth, int finalMonth) {
         var initialDate = LocalDate.now().withMonth(initialMonth).withDayOfMonth(1);
         var firstDayAtFinalMonth = initialDate.withMonth(finalMonth);
         var finalDate = firstDayAtFinalMonth.withDayOfMonth(firstDayAtFinalMonth.lengthOfMonth());
