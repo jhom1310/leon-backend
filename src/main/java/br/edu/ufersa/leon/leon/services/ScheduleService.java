@@ -38,11 +38,11 @@ public class ScheduleService {
         return intervals.stream()
                 .collect(Collectors.groupingBy(interval -> interval.getDate().getMonth()))
                 .entrySet().stream()
-                .map(entry -> ScheduleDTO.from(entry.getKey().getValue(), sortedIntervals(entry.getValue())))
+                .map(entry -> ScheduleDTO.from(entry.getKey().getValue(), sortIntervals(entry.getValue())))
                 .collect(Collectors.toList());
     }
 
-    private List<Interval> sortedIntervals(List<Interval> intervals) {
+    private List<Interval> sortIntervals(List<Interval> intervals) {
         var comparator = Comparator
                 .comparing(Interval::getDate)
                 .thenComparing(Interval::getInitialTime)
