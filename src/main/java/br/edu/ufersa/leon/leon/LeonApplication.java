@@ -67,7 +67,9 @@ public class LeonApplication {
             var ioga = modalities.get(0);
             var iogaClasse = new Classe(null, gym, 42.0, teacher, new ArrayList<>(), ioga, new ArrayList<>());
             iogaClasse = classeRepository.save(iogaClasse);
-            var interval = new Interval(null, LocalTime.of(18, 0), LocalTime.of(19, 0), iogaClasse);
+            var interval = new Interval(null, LocalDate.now(), LocalTime.of(18, 0), LocalTime.of(19, 0), iogaClasse);
+            intervalRepository.save(interval);
+            interval = new Interval(null, LocalDate.now().plusDays(1), LocalTime.of(14, 0), LocalTime.of(14, 30), iogaClasse);
             intervalRepository.save(interval);
         };
     }

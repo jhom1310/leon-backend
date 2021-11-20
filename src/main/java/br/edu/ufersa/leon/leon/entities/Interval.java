@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Entity
@@ -16,6 +17,7 @@ public class Interval {
     @Id
     @GeneratedValue
     private Long id;
+    private LocalDate date;
     private LocalTime initialTime;
     private LocalTime finalTime;
     @ManyToOne
