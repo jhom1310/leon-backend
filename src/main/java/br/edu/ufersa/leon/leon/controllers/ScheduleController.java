@@ -1,6 +1,6 @@
 package br.edu.ufersa.leon.leon.controllers;
 
-import br.edu.ufersa.leon.leon.dtos.schedule.ScheduleDTO;
+import br.edu.ufersa.leon.leon.dtos.schedule.ScheduleReportDTO;
 import br.edu.ufersa.leon.leon.services.ScheduleService;
 import br.edu.ufersa.leon.leon.services.UserService;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,7 +24,7 @@ public class ScheduleController {
     }
 
     @GetMapping
-    public List<ScheduleDTO> findAll() {
+    public List<ScheduleReportDTO> findAll() {
         var userEmail = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         var user = userService.findUserByEmail(userEmail);
         var month = LocalDate.now().getMonthValue();
@@ -32,7 +32,7 @@ public class ScheduleController {
     }
 
     @GetMapping("/filter")
-    public List<ScheduleDTO> findAllBetween(
+    public List<ScheduleReportDTO> findAllBetween(
             @RequestParam(value = "initialMonth") int initialMonth,
             @RequestParam(value = "finalMonth") int finalMonth
     ) {

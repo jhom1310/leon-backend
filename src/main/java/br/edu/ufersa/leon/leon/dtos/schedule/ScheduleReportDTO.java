@@ -11,12 +11,12 @@ import java.util.stream.Collectors;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ScheduleDTO {
+public class ScheduleReportDTO {
     private int month;
     private List<LectureDTO> lectures;
 
-    public static ScheduleDTO from(int month, List<Interval> intervals) {
-        var dto = new ScheduleDTO();
+    public static ScheduleReportDTO from(int month, List<Interval> intervals) {
+        var dto = new ScheduleReportDTO();
         dto.setMonth(month);
         var lectures = intervals.stream().map(LectureDTO::fromInterval).collect(Collectors.toList());
         dto.setLectures(lectures);

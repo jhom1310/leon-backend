@@ -1,6 +1,6 @@
 package br.edu.ufersa.leon.leon.services;
 
-import br.edu.ufersa.leon.leon.dtos.schedule.ScheduleDTO;
+import br.edu.ufersa.leon.leon.dtos.schedule.ScheduleReportDTO;
 import br.edu.ufersa.leon.leon.entities.Interval;
 import br.edu.ufersa.leon.leon.entities.User;
 import br.edu.ufersa.leon.leon.repositories.IntervalRepository;
@@ -19,14 +19,14 @@ public class ScheduleService {
         this.intervalRepository = intervalRepository;
     }
 
-    public List<ScheduleDTO> getScheduleOfUser(User user, int month) {
+    public List<ScheduleReportDTO> getScheduleOfUser(User user, int month) {
         var initialDate = LocalDate.now().withMonth(month).withDayOfMonth(1);
         var finalDate = initialDate.withDayOfMonth(initialDate.lengthOfMonth());
         var intervals = intervalRepository.getScheduleBetween(user.getId(), initialDate, finalDate);
         return mapIntervalsToSchedules(intervals);
     }
 
-    public List<ScheduleDTO> getScheduleOfUserBetween(User user, int initialMonth, int finalMonth) {
+    public List<ScheduleReportDTO> getScheduleOfUserBetween(User user, int initialMonth, int finalMonth) {
         var initialDate = LocalDate.now().withMonth(initialMonth).withDayOfMonth(1);
         var firstDayAtFinalMonth = initialDate.withMonth(finalMonth);
         var finalDate = firstDayAtFinalMonth.withDayOfMonth(firstDayAtFinalMonth.lengthOfMonth());
@@ -34,11 +34,11 @@ public class ScheduleService {
         return mapIntervalsToSchedules(intervals);
     }
 
-    private List<ScheduleDTO> mapIntervalsToSchedules(List<Interval> intervals) {
+    private List<ScheduleReportDTO> mapIntervalsToSchedules(List<Interval> intervals) {
         return intervals.stream()
                 .collect(Collectors.groupingBy(interval -> interval.getDate().getMonth()))
                 .entrySet().stream()
-                .map(entry -> ScheduleDTO.from(entry.getKey().getValue(), sortIntervals(entry.getValue())))
+                .map(entry -> ScheduleReportDTO.from(entry.getKey().getValue(), sortIntervals(entry.getValue())))
                 .collect(Collectors.toList());
     }
 
