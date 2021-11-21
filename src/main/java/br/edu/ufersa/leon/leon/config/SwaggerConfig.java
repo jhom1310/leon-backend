@@ -1,5 +1,6 @@
 package br.edu.ufersa.leon.leon.config;
 
+import br.edu.ufersa.leon.leon.LeonApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.PathSelectors;
@@ -18,7 +19,7 @@ public class SwaggerConfig {
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .apis(RequestHandlerSelectors.any())
+                .apis(RequestHandlerSelectors.basePackage(LeonApplication.class.getPackageName()))
                 .paths(PathSelectors.any())
                 .build()
                 .apiInfo(buildApiInfo());
