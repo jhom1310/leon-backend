@@ -1,6 +1,7 @@
 package br.edu.ufersa.leon.leon.services;
 
 import br.edu.ufersa.leon.leon.dtos.core.GymDTO;
+import br.edu.ufersa.leon.leon.dtos.gym.GymCreationDTO;
 import br.edu.ufersa.leon.leon.repositories.GymRepository;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,12 @@ public class GymService {
 
     public GymService(GymRepository gymRepository) {
         this.gymRepository = gymRepository;
+    }
+
+    public GymDTO save(GymCreationDTO gymCreation) {
+        var gym = gymCreation.toEntity();
+        gym = gymRepository.save(gym);
+        return GymDTO.fromEntity(gym);
     }
 
     public List<GymDTO> findAll() {
