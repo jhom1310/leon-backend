@@ -1,11 +1,12 @@
 package br.edu.ufersa.leon.leon.services;
 
 import br.edu.ufersa.leon.leon.dtos.classe.ClasseCreationDTO;
+import br.edu.ufersa.leon.leon.dtos.classe.ClasseEditDTO;
 import br.edu.ufersa.leon.leon.dtos.classe.ClasseJoinRequestDTO;
 import br.edu.ufersa.leon.leon.dtos.core.ClasseDTO;
-import br.edu.ufersa.leon.leon.entities.Classe;
-import br.edu.ufersa.leon.leon.entities.User;
+import br.edu.ufersa.leon.leon.entities.*;
 import br.edu.ufersa.leon.leon.repositories.*;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -52,14 +53,50 @@ public class ClasseService {
     }
 
     public Optional<ClasseDTO> save(ClasseCreationDTO classeCreation) {
-        var gym = gymRepository.findById(classeCreation.getGymID()).orElse(null);
-        var teacher = teacherRepository.findById(classeCreation.getTeacherID()).orElse(null);
-        var modality = modalityRepository.findById(classeCreation.getModalityID()).orElse(null);
+        return createClasse(classeCreation.getGymID(), classeCreation.getTeacherID(), classeCreation.getModalityID(), classeCreation.getPrice())
+                .map(classe -> ClasseDTO.fromEntity(classeRepository.save(classe)));
+    }
+
+    public Optional<ClasseDTO> edit(Long id, ClasseEditDTO classeEdit) {
+        var maybeClasse = classeRepository.findById(id);
+        if (maybeClasse.isEmpty()) {
+            return Optional.empty();
+        }
+
+        var classe = maybeClasse.get();
+        var gym = classeEdit.getGymID().flatMap(gymRepository::findById).orElseGet(classe::getGym);
+        var modality = classeEdit.getModalityID().flatMap(modalityRepository::findById).orElseGet(classe::getModality);
+        var teacher = classeEdit.getTeacherID().flatMap(teacherRepository::findById).orElseGet(classe::getTeacher);
+        var price = classeEdit.getPrice().orElseGet(classe::getPrice);
+        classe.setGym(gym);
+        classe.setModality(modality);
+        classe.setTeacher(teacher);
+        classe.setPrice(price);
+        classe = classeRepository.save(classe);
+
+        return Optional.of(ClasseDTO.fromEntity(classe));
+    }
+
+    private Optional<Classe> createClasse(Long gymID, Long teacherID, Long modalityID, double price) {
+        return findDependencies(gymID, teacherID, modalityID).map(
+                dependencies -> new Classe(null, dependencies.gym, price, dependencies.teacher, List.of(), dependencies.modality, List.of())
+        );
+    }
+
+    private Optional<ClasseDependencies> findDependencies(Long gymID, Long teacherID, Long modalityID) {
+        var gym = gymRepository.findById(gymID).orElse(null);
+        var teacher = teacherRepository.findById(teacherID).orElse(null);
+        var modality = modalityRepository.findById(modalityID).orElse(null);
         if (gym == null || teacher == null || modality == null) {
             return Optional.empty();
         }
-        var classe = new Classe(null, gym, classeCreation.getPrice(), teacher, List.of(), modality, List.of());
-        classe = classeRepository.save(classe);
-        return Optional.of(ClasseDTO.fromEntity(classe));
+        return Optional.of(new ClasseDependencies(gym, teacher, modality));
+    }
+
+    @AllArgsConstructor
+    private static class ClasseDependencies {
+        Gym gym;
+        Teacher teacher;
+        Modality modality;
     }
 }

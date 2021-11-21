@@ -49,6 +49,8 @@ public class LeonSeed implements CommandLineRunner {
         );
         var gym = new Gym(null, "Academia 1", "Rua dos Bobos");
         gymRepository.save(gym);
+        gymRepository.save(new Gym(null, "Academia 2", "Rua dos Santos"));
+
         var teacher = new Teacher(null, "Maykon", UserService.DEFAULT_AVATAR_URL, List.of());
         teacherRepository.save(teacher);
         var ioga = modalities.get(0);
