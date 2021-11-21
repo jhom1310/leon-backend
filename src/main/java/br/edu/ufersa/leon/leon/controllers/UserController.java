@@ -5,7 +5,6 @@ import br.edu.ufersa.leon.leon.dtos.user.UserCreatedDTO;
 import br.edu.ufersa.leon.leon.dtos.user.UserCreationDTO;
 import br.edu.ufersa.leon.leon.dtos.user.UserProfileDTO;
 import br.edu.ufersa.leon.leon.entities.RoleType;
-import br.edu.ufersa.leon.leon.entities.User;
 import br.edu.ufersa.leon.leon.services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +28,7 @@ public class UserController {
     }
 
     @GetMapping
-    public List<User> findAll() {
+    public List<UserProfileDTO> findAll() {
         return userService.getAll();
     }
 

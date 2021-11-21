@@ -27,6 +27,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public static final String AUTH_ROUTE = "/auth";
     public static final String USERS_ROUTE = "/users";
     public static final String MODALITIES_ROUTE = "/modalities";
+
+    private static class AdminRoutes {
+        static final String[] GET = new String[]{
+                USERS_ROUTE
+        };
+    }
+
     private final UserDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
 
@@ -52,13 +59,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                    .antMatchers(POST, AUTH_ROUTE + "/**", USERS_ROUTE).permitAll()
+                .antMatchers(POST, AUTH_ROUTE + "/**", USERS_ROUTE).permitAll()
                 .and()
                 .authorizeRequests().antMatchers(GET, MODALITIES_ROUTE + "/**").permitAll()
                 .and()
                 .authorizeRequests().antMatchers(POST).hasRole(RoleType.ADMIN.name())
                 .and()
                 .authorizeRequests().antMatchers(PATCH).hasRole(RoleType.ADMIN.name())
+                .and()
+                .authorizeRequests().antMatchers(GET, AdminRoutes.GET).hasRole(RoleType.ADMIN.name())
                 .and()
                 .authorizeRequests().antMatchers(
                         "/v2/api-docs",

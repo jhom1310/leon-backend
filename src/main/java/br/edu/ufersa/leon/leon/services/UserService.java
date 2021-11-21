@@ -33,8 +33,8 @@ public class UserService implements UserDetailsService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public List<User> getAll() {
-        return userRepository.findAll();
+    public List<UserProfileDTO> getAll() {
+        return userRepository.findAll().stream().map(UserProfileDTO::fromEntity).collect(Collectors.toList());
     }
 
     public Role save(Role role) {
