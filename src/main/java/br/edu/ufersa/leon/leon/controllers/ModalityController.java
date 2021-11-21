@@ -2,6 +2,7 @@ package br.edu.ufersa.leon.leon.controllers;
 
 import br.edu.ufersa.leon.leon.dtos.modality.ModalityCreationDTO;
 import br.edu.ufersa.leon.leon.dtos.modality.ModalityDTO;
+import br.edu.ufersa.leon.leon.dtos.modality.ModalityEditDTO;
 import br.edu.ufersa.leon.leon.dtos.modality.PaginatedModalityClassesDTO;
 import br.edu.ufersa.leon.leon.services.ModalityService;
 import org.springframework.data.domain.Pageable;
@@ -26,6 +27,13 @@ public class ModalityController {
     @PostMapping
     public ModalityDTO save(@Valid @RequestBody ModalityCreationDTO modalityCreation) {
         return modalityService.save(modalityCreation);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<ModalityDTO> edit(@PathVariable @NotNull Long id, @RequestBody ModalityEditDTO modalityEdit) {
+        return modalityService.edit(id, modalityEdit)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping

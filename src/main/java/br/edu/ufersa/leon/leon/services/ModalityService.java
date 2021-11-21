@@ -2,6 +2,7 @@ package br.edu.ufersa.leon.leon.services;
 
 import br.edu.ufersa.leon.leon.dtos.modality.ModalityCreationDTO;
 import br.edu.ufersa.leon.leon.dtos.modality.ModalityDTO;
+import br.edu.ufersa.leon.leon.dtos.modality.ModalityEditDTO;
 import br.edu.ufersa.leon.leon.dtos.modality.PaginatedModalityClassesDTO;
 import br.edu.ufersa.leon.leon.entities.Classe;
 import br.edu.ufersa.leon.leon.entities.Modality;
@@ -73,5 +74,10 @@ public class ModalityService {
         var modality = modalityCreation.toEntity();
         modality = modalityRepository.save(modality);
         return ModalityDTO.fromEntity(modality);
+    }
+
+    public Optional<ModalityDTO> edit(Long id, ModalityEditDTO modalityEdit) {
+        return modalityRepository.findById(id)
+                .map(modality -> ModalityDTO.fromEntity(modalityRepository.save(modalityEdit.edit(modality))));
     }
 }
