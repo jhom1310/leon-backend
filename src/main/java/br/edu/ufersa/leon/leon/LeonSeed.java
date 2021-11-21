@@ -64,8 +64,17 @@ public class LeonSeed implements CommandLineRunner {
     }
 
     private User usersSeed() {
-        var userRole = userService.save(new Role(null, RoleType.USER.getName()));
+        userService.save(new Role(null, RoleType.USER.getName()));
         userService.save(new Role(null, RoleType.ADMIN.getName()));
+
+        var admin = new User();
+        admin.setName("Admin Doe");
+        admin.setEmail("admin@gmail.com");
+        admin.setAddress("Rua dos Admin, Nº 69");
+        admin.setBirthday(LocalDate.now());
+        admin.setPassword("123");
+        admin.setAvatarURL("https://i.imgur.com/4JhL9z4.jpg");
+        System.out.println(userService.save(admin, RoleType.ADMIN));
 
         var foo = new User();
         foo.setName("John Doe");
@@ -74,8 +83,7 @@ public class LeonSeed implements CommandLineRunner {
         foo.setBirthday(LocalDate.now());
         foo.setPassword("123");
         foo.setAvatarURL("https://i.imgur.com/4JhL9z4.jpg");
-        foo.setRoles(List.of(userRole));
-        return userService.save(foo).get();
+        return userService.save(foo, RoleType.USER).get();
     }
 
     private void paymentsSeed(User user, Classe classe) {

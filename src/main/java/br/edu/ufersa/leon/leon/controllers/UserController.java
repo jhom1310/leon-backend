@@ -4,6 +4,7 @@ import br.edu.ufersa.leon.leon.dtos.user.EditUserProfileDTO;
 import br.edu.ufersa.leon.leon.dtos.user.UserCreatedDTO;
 import br.edu.ufersa.leon.leon.dtos.user.UserCreationDTO;
 import br.edu.ufersa.leon.leon.dtos.user.UserProfileDTO;
+import br.edu.ufersa.leon.leon.entities.RoleType;
 import br.edu.ufersa.leon.leon.entities.User;
 import br.edu.ufersa.leon.leon.services.UserService;
 import org.springframework.http.HttpStatus;
@@ -17,7 +18,6 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import java.net.URI;
 import java.util.List;
-
 
 @RestController
 @RequestMapping("/users")
@@ -51,7 +51,7 @@ public class UserController {
     @PostMapping
     public ResponseEntity<UserCreatedDTO> save(@Valid @RequestBody UserCreationDTO userCreation) {
         var uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/users").toUriString());
-        return userService.save(userCreation.asEntity())
+        return userService.save(userCreation.asEntity(), RoleType.USER)
             .map(user -> {
                 var userCreated = UserCreatedDTO.fromEntity(user);
                 return ResponseEntity.created(uri).body(userCreated);

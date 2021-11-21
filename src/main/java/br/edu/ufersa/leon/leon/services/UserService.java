@@ -41,7 +41,7 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    public Optional<User> save(User user) {
+    public Optional<User> save(User user, RoleType roleType) {
         var userAlreadyExists = userRepository.findUserByEmail(user.getEmail()) != null;
         if (userAlreadyExists) {
             return Optional.empty();
@@ -49,7 +49,7 @@ public class UserService implements UserDetailsService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setAvatarURL(DEFAULT_AVATAR_URL);
         user.setAvailableExperiments(INITIAL_AVAILABLE_EXPERIMENTS_COUNT);
-        var role = roleRepository.findByName(RoleType.USER.getName());
+        var role = roleRepository.findByName(roleType.getName());
         user.setRoles(List.of(role));
         return Optional.of(userRepository.save(user));
     }

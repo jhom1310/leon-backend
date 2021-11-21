@@ -1,5 +1,6 @@
 package br.edu.ufersa.leon.leon.config;
 
+import br.edu.ufersa.leon.leon.entities.RoleType;
 import br.edu.ufersa.leon.leon.filters.JwtAuthenticationFilter;
 import br.edu.ufersa.leon.leon.filters.JwtTokenVerifierFilter;
 import org.springframework.context.annotation.Bean;
@@ -51,9 +52,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .authorizeRequests().antMatchers(POST, AUTH_ROUTE + "/**").permitAll()
+                .authorizeRequests()
+                    .antMatchers(POST, AUTH_ROUTE + "/**", USERS_ROUTE).permitAll()
                 .and()
                 .authorizeRequests().antMatchers(GET, MODALITIES_ROUTE + "/**").permitAll()
+                .and()
+                .authorizeRequests().antMatchers(POST).hasRole(RoleType.ADMIN.name())
                 .and()
                 .authorizeRequests().antMatchers(
                         "/v2/api-docs",
