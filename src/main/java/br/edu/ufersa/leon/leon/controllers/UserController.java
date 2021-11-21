@@ -33,28 +33,35 @@ public class UserController {
         return userService.getAll();
     }
 
-    @GetMapping("/{email}")
-    public ResponseEntity<UserProfileDTO> findByEmail(@PathVariable @NotNull @Email String email) {
+    private boolean currentUserHasEmail(String email) {
         var authenticatedUserEmail = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (!authenticatedUserEmail.equals(email)) {
+        return authenticatedUserEmail.equals(email);
+    }
+
+    @GetMapping("/{email}")
+    public ResponseEntity<UserProfileDTO> findProfileByEmail(@PathVariable @NotNull @Email String email) {
+        if (!currentUserHasEmail(email)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
-        var user = userService.findUserByEmail(email);
-        return ResponseEntity.ok(UserProfileDTO.fromEntity(user));
+        return userService.findProfileByEmail(email)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PatchMapping("/{email}")
-    public void update(@PathVariable @NotNull @Email String email, @Valid @RequestBody EditUserProfileDTO userProfile) {
-        userService.update(email, userProfile);
+    public ResponseEntity<UserProfileDTO> edit(@PathVariable @NotNull @Email String email, @Valid @RequestBody EditUserProfileDTO userProfile) {
+        return userService.edit(email, userProfile)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
     public ResponseEntity<UserCreatedDTO> save(@Valid @RequestBody UserCreationDTO userCreation) {
         var uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/users").toUriString());
         return userService.save(userCreation.asEntity(), RoleType.USER)
-            .map(user -> {
-                var userCreated = UserCreatedDTO.fromEntity(user);
-                return ResponseEntity.created(uri).body(userCreated);
-            }).orElseGet(ResponseEntity.status(HttpStatus.CONFLICT)::build);
+                .map(user -> {
+                    var userCreated = UserCreatedDTO.fromEntity(user);
+                    return ResponseEntity.created(uri).body(userCreated);
+                }).orElseGet(ResponseEntity.status(HttpStatus.CONFLICT)::build);
     }
 }

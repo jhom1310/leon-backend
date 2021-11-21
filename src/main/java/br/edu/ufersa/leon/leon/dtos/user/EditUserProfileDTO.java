@@ -3,25 +3,21 @@ package br.edu.ufersa.leon.leon.dtos.user;
 import br.edu.ufersa.leon.leon.entities.User;
 import lombok.Data;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
+import java.util.Optional;
 
 @Data
 public class EditUserProfileDTO {
-    @NotBlank
     String name;
     String address;
     LocalDate birthday;
-    @NotBlank
     String avatarURL;
 
-    public static EditUserProfileDTO fromEntity(User user) {
-        var editUserProfile = new EditUserProfileDTO();
-        editUserProfile.setName(user.getName());
-        editUserProfile.setAddress(user.getAddress());
-        editUserProfile.setBirthday(user.getBirthday());
-        editUserProfile.setAvatarURL(user.getAvatarURL());
-        return editUserProfile;
+    public User edit(User user) {
+        user.setName(Optional.ofNullable(name).orElseGet(user::getName));
+        user.setAddress(Optional.ofNullable(address).orElseGet(user::getAddress));
+        user.setBirthday(Optional.ofNullable(birthday).orElseGet(user::getBirthday));
+        user.setAvatarURL(Optional.ofNullable(avatarURL).orElseGet(user::getAvatarURL));
+        return user;
     }
 }

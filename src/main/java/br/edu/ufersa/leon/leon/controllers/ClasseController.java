@@ -40,10 +40,11 @@ public class ClasseController {
     }
 
     @GetMapping
-    public List<ClasseDTO> findAll() {
+    public ResponseEntity<List<ClasseDTO>> findAll() {
         var userEmail = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        var user = userService.findUserByEmail(userEmail);
-        return classeService.findUserClasses(user.getId());
+        return userService.findUserByEmail(userEmail)
+                .map(user -> ResponseEntity.ok(classeService.findUserClasses(user.getId())))
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping("/{id}/users")
@@ -52,8 +53,11 @@ public class ClasseController {
             @RequestBody @Valid ClasseJoinRequestDTO classeJoinRequest
     ) {
         var userEmail = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        var user = userService.findUserByEmail(userEmail);
-        var userJoined = classeService.join(classeID, user, classeJoinRequest);
+        var maybeUser = userService.findUserByEmail(userEmail);
+        if (maybeUser.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        var userJoined = classeService.join(classeID, maybeUser.get(), classeJoinRequest);
         if (!userJoined) {
             return ResponseEntity.badRequest().build();
         }

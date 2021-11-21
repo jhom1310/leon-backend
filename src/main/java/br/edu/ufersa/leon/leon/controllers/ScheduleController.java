@@ -3,6 +3,7 @@ package br.edu.ufersa.leon.leon.controllers;
 import br.edu.ufersa.leon.leon.dtos.schedule.ScheduleReportDTO;
 import br.edu.ufersa.leon.leon.services.ScheduleService;
 import br.edu.ufersa.leon.leon.services.UserService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,20 +25,28 @@ public class ScheduleController {
     }
 
     @GetMapping
-    public List<ScheduleReportDTO> findAll() {
+    public ResponseEntity<List<ScheduleReportDTO>> findAll() {
         var userEmail = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        var user = userService.findUserByEmail(userEmail);
-        var month = LocalDate.now().getMonthValue();
-        return scheduleService.getSchedulesBetween(user, month, month);
+        return userService.findUserByEmail(userEmail).map(
+                user -> {
+                    var month = LocalDate.now().getMonthValue();
+                    var schedules = scheduleService.getSchedulesBetween(user, month, month);
+                    return ResponseEntity.ok(schedules);
+                }
+        ).orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping("/filter")
-    public List<ScheduleReportDTO> findAllBetween(
+    public ResponseEntity<List<ScheduleReportDTO>> findAllBetween(
             @RequestParam(value = "initialMonth") int initialMonth,
             @RequestParam(value = "finalMonth") int finalMonth
     ) {
         var userEmail = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        var user = userService.findUserByEmail(userEmail);
-        return scheduleService.getSchedulesBetween(user, initialMonth, finalMonth);
+        return userService.findUserByEmail(userEmail).map(
+                user -> {
+                    var schedules = scheduleService.getSchedulesBetween(user, initialMonth, finalMonth);
+                    return ResponseEntity.ok(schedules);
+                }
+        ).orElse(ResponseEntity.notFound().build());
     }
 }

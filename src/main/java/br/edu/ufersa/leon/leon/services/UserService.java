@@ -1,6 +1,7 @@
 package br.edu.ufersa.leon.leon.services;
 
 import br.edu.ufersa.leon.leon.dtos.user.EditUserProfileDTO;
+import br.edu.ufersa.leon.leon.dtos.user.UserProfileDTO;
 import br.edu.ufersa.leon.leon.entities.Role;
 import br.edu.ufersa.leon.leon.entities.RoleType;
 import br.edu.ufersa.leon.leon.entities.User;
@@ -42,8 +43,7 @@ public class UserService implements UserDetailsService {
 
     @Transactional
     public Optional<User> save(User user, RoleType roleType) {
-        var userAlreadyExists = userRepository.findUserByEmail(user.getEmail()) != null;
-        if (userAlreadyExists) {
+        if (userRepository.existsByEmail(user.getEmail())) {
             return Optional.empty();
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -54,29 +54,26 @@ public class UserService implements UserDetailsService {
         return Optional.of(userRepository.save(user));
     }
 
-    public User findUserByEmail(String email) {
-        var user = userRepository.findUserByEmail(email);
-        if (user == null) {
-            throw new UsernameNotFoundException("Email not found");
-        }
-        return user;
+    public Optional<UserProfileDTO> findProfileByEmail(String email) {
+        return findUserByEmail(email).map(UserProfileDTO::fromEntity);
+    }
+
+    public Optional<User> findUserByEmail(String email) {
+        return userRepository.findUserByEmail(email);
     }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        var user = findUserByEmail(email);
+        var user = findUserByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("Couldn't find email '" + email + "'"));
         var authorities = user.getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName()))
                 .collect(Collectors.toList());
         return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), authorities);
     }
 
-    public User update(String email, EditUserProfileDTO userProfile) {
-        var user = findUserByEmail(email);
-        user.setName(userProfile.getName());
-        user.setAddress(userProfile.getAddress());
-        user.setBirthday(userProfile.getBirthday());
-        user.setAvatarURL(userProfile.getAvatarURL());
-        return userRepository.save(user);
+    public Optional<UserProfileDTO> edit(String email, EditUserProfileDTO userProfile) {
+        return findUserByEmail(email)
+                .map(user -> UserProfileDTO.fromEntity(userRepository.save(userProfile.edit(user))));
     }
 }
