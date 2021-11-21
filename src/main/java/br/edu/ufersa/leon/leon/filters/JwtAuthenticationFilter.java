@@ -30,9 +30,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     protected static final String SECRET_KEY = "super-secret-password";
     public static final String ACCESS_TOKEN_HEADER = "access_token";
-    public static final String REFRESH_TOKEN_HEADER = "refresh_token";
     private static final long ACCESS_TOKEN_MINUTES = 10;
-    private static final long REFRESH_TOKEN_MINUTES = 1 * 24 * 60;
     private final AuthenticationManager authenticationManager;
 
     public JwtAuthenticationFilter(AuthenticationManager authenticationManager) {
@@ -64,8 +62,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         var user = (User) authResult.getPrincipal();
         var algorithm = Algorithm.HMAC256(SECRET_KEY.getBytes());
         var accessToken = createToken(request, user, algorithm, ACCESS_TOKEN_MINUTES);
-        var refreshToken = createToken(request, user, algorithm, REFRESH_TOKEN_MINUTES);
-        var tokens = Map.of(ACCESS_TOKEN_HEADER, accessToken, REFRESH_TOKEN_HEADER, refreshToken);
+        var tokens = Map.of(ACCESS_TOKEN_HEADER, accessToken);
         response.setContentType(APPLICATION_JSON_VALUE);
         new ObjectMapper().writeValue(response.getOutputStream(), tokens);
     }
