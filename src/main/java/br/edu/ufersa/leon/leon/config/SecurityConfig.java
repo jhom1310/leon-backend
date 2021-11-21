@@ -19,8 +19,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
 
-import static org.springframework.http.HttpMethod.GET;
-import static org.springframework.http.HttpMethod.POST;
+import static org.springframework.http.HttpMethod.*;
 
 @Configuration
 @EnableWebSecurity
@@ -58,6 +57,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests().antMatchers(GET, MODALITIES_ROUTE + "/**").permitAll()
                 .and()
                 .authorizeRequests().antMatchers(POST).hasRole(RoleType.ADMIN.name())
+                .and()
+                .authorizeRequests().antMatchers(PATCH).hasRole(RoleType.ADMIN.name())
                 .and()
                 .authorizeRequests().antMatchers(
                         "/v2/api-docs",
