@@ -1,5 +1,6 @@
 package br.edu.ufersa.leon.leon.controllers;
 
+import br.edu.ufersa.leon.leon.dtos.classe.ClasseCreationDTO;
 import br.edu.ufersa.leon.leon.dtos.classe.ClasseJoinRequestDTO;
 import br.edu.ufersa.leon.leon.dtos.core.ClasseDTO;
 import br.edu.ufersa.leon.leon.services.ClasseService;
@@ -21,6 +22,13 @@ public class ClasseController {
     public ClasseController(ClasseService classeService, UserService userService) {
         this.classeService = classeService;
         this.userService = userService;
+    }
+
+    @PostMapping
+    public ResponseEntity<ClasseDTO> save(@Valid @RequestBody ClasseCreationDTO classeCreation) {
+        return classeService.save(classeCreation)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping
