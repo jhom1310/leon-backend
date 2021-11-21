@@ -29,9 +29,6 @@ public class GymService {
     }
 
     public Optional<GymDTO> edit(Long id, GymEditDTO gymEdit) {
-        return gymRepository.findById(id).map(gym -> {
-            gymEdit.edit(gym);
-            return GymDTO.fromEntity(gymRepository.save(gym));
-        });
+        return gymRepository.findById(id).map(gym -> GymDTO.fromEntity(gymRepository.save(gymEdit.edit(gym))));
     }
 }
